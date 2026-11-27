@@ -2,6 +2,8 @@
 
 **대본만 쓰면 실사 스톡·AI 내레이션·움직이는 그래프가 들어간 설명 영상을 가로·세로·쇼츠형 3종으로 자동으로 만들어 주는 Claude 스킬**
 
+> 만든 사람: **AI 줄리엣**
+
 얼굴 없이 목소리로 이슈나 지식을 설명하는 유튜브·릴스·쇼츠 영상용입니다.
 실사 화면은 [픽사베이](https://pixabay.com) 무료 스톡, 목소리는 [일레븐랩스](https://elevenlabs.io), 그래프와 카드는 HTML 애니메이션으로 직접 그립니다. AI로 만든 이미지는 쓰지 않습니다.
 
@@ -169,3 +171,7 @@ scripts/make.sh ~/videos/내주제             # → out_h.mp4, out_v.mp4, out_f
 ## 저작권
 - 픽사베이 콘텐츠는 [픽사베이 라이선스](https://pixabay.com/service/license-summary/)를 따릅니다(상업 이용 가능, 원본 그대로 재배포·판매 금지). 이 저장소에는 스톡 원본이 들어 있지 않고 실행할 때 각자 받습니다
 - 글꼴: Noto Sans KR, 나눔명조 (SIL OFL)
+
+---
+
+만든 사람: **AI 줄리엣** · 문의나 제안은 [이슈](https://github.com/woolfie1101/info-video/issues)로 남겨 주세요.
