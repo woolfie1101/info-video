@@ -51,6 +51,17 @@ def main():
     elif cmd == "sync":
         root = Path(sys.argv[2]).resolve(); load_env(root)
         cfg = json.loads((root / "config.json").read_text(encoding="utf-8")); (root / "stock").mkdir(exist_ok=True)
+        # 한 영상 안에서 같은 스톡을 두 번 쓰지 않는다
+        seen = {}
+        for i, sc in enumerate(cfg["scenes"], 1):
+            for key in ("pixabay_video", "pixabay_video_v", "pixabay_image"):
+                if sc.get(key): seen.setdefault((key[:13], sc[key]), []).append(i)
+            g = sc.get("graphic") or {}
+            if g.get("pixabay_image"): seen.setdefault(("pixabay_image", g["pixabay_image"]), []).append(i)
+        dup = {k: v for k, v in seen.items() if len(v) > 1}
+        if dup:
+            sys.exit("같은 스톡이 여러 장면에 쓰였습니다(장면마다 다른 스톡을 고르세요): " +
+                     ", ".join(f"{k[1]} → 장면 {v}" for k, v in dup.items()))
         for i, sc in enumerate(cfg["scenes"], 1):
             for key, ext, fn in (("pixabay_video", "mp4", "v"), ("pixabay_video_v", "mp4", "vv"), ("pixabay_image", "jpg", "i")):
                 if not sc.get(key): continue
@@ -76,9 +87,10 @@ def main():
             download(h["videos"]["medium"]["thumbnail"], f); ins += ["-i", str(f)]
         n = len(ids); cols = min(4, n)
         lay = "|".join(f"{(k % cols) * 480}_{(k // cols) * 270}" for k in range(n))
-        fl = ";".join(f"[{k}]scale=480:270,drawtext=text='{ids[k]}':x=10:y=10:fontsize=28:fontcolor=white:box=1:boxcolor=black@0.6[s{k}]" for k in range(n))
+        fl = ";".join(f"[{k}]scale=480:270,setsar=1[s{k}]" for k in range(n))  # drawtext 없는 ffmpeg도 있어 글자는 안 넣음
         fl += ";" + "".join(f"[s{k}]" for k in range(n)) + (f"xstack=inputs={n}:layout={lay}" if n > 1 else "null")
-        subprocess.run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex", fl, sys.argv[3]], check=True); print(sys.argv[3])
+        subprocess.run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex", fl, sys.argv[3]], check=True)
+        print(sys.argv[3]); print("순서(왼→오, 위→아래, 한 줄 4개):", ", ".join(ids))
     else:
         print(__doc__)
 
