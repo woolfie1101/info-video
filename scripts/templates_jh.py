@@ -13,11 +13,11 @@ from common import SERIF, HAND, BUBBLE, POSTER
 
 BLUE, LBLUE, RED, YEL, NAVY = "#2f6fd6", "#dce8f8", "#e03a3a", "#f0e040", "#1f4aa8"
 OVERLAY_TYPES = {"darkcard", "tanbox", "number", "faded", "bubble", "headbar", "callout", "pin", "kinetic", "stamp", "vsnum"}
-DARK_TYPES = {"glitch", "portrait"}
+DARK_TYPES = {"glitch", "define", "portrait"}
 
 JH_CSS = """
 @keyframes blurIn{from{opacity:0;filter:blur(12px)}to{opacity:1;filter:none}}
-@keyframes kb{from{transform:scale(1)}to{transform:scale(1.04)}}
+@keyframes kb{from{transform:none}to{transform:none}}  /* 줌 없음(오너 요청) */
 @keyframes tiltIn{from{opacity:0;filter:blur(8px);transform:perspective(1600px) rotateX(24deg) rotateY(-12deg) scale(.88)}
                   to{opacity:1;filter:none;transform:none}}
 @keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
@@ -279,7 +279,7 @@ def number(si, g, at, ctx):
     css = f""".nwrap{{position:absolute;left:0;right:0;top:{g.get('y', .42) * 800:.0f}px;transform:translateY(-50%);text-align:center}}
     .nl{{display:inline-block;background:#fff;border:3px solid #333;border-radius:24px;padding:4px 22px;font-size:30px;font-weight:700;color:#222;margin-bottom:10px}}
     .nn{{font-size:{g.get('size', 170)}px;font-weight:900;color:{col};letter-spacing:-4px;line-height:1.05;
-        text-shadow:0 3px 0 #345,0 6px 0 #234,0 10px 24px rgba(0,0,0,.55);-webkit-text-stroke:3px #2b3f57;animation:blurIn .3s {t0:.2f}s both}}
+        text-shadow:0 8px 24px rgba(0,0,0,.5);-webkit-text-stroke:12px #14202e;paint-order:stroke fill;animation:blurIn .3s {t0:.2f}s both}}
     .nn small{{font-size:.5em;letter-spacing:0;margin-left:10px}}
     .ns{{font-size:28px;color:#fff;font-weight:700;text-shadow:0 2px 6px rgba(0,0,0,.8)}}"""
     num = count(g["value"], t0 + .1, g.get("count_seconds", .8), frm=g.get("from", 0))
@@ -400,13 +400,13 @@ def vsnum(si, g, at, ctx):
     memo = f"<div class=vsM style='animation:fadeIn2 .3s {tG + .2:.2f}s both'>{esc(g['memo'])}</div>" if g.get("memo") else ""
     css = f""".vsw{{position:absolute;left:0;right:0;top:{g.get('y', .5) * 800:.0f}px;transform:translateY(-50%);display:flex;align-items:flex-end;justify-content:center;gap:34px}}
     .vsS{{text-align:center}}.vsC{{display:inline-block;background:#fff;border:3px solid #333;border-radius:22px;padding:2px 22px;font-size:34px;font-weight:700;color:#222}}
-    .vsN{{font-size:150px;font-weight:900;letter-spacing:-4px;line-height:1.05;-webkit-text-stroke:3px #2b3f57;text-shadow:0 4px 0 #2b3f57,0 8px 20px rgba(0,0,0,.35)}}
+    .vsN{{font-size:150px;font-weight:900;letter-spacing:-2px;line-height:1.05;-webkit-text-stroke:12px #14202e;paint-order:stroke fill;text-shadow:0 8px 24px rgba(0,0,0,.45)}}
     .vsN small{{font-size:.62em;letter-spacing:-2px}}
-    .vsG{{font-size:110px;font-weight:900;color:#3a3f47;line-height:1.1;position:relative}}
-    .vsM{{position:absolute;left:50%;top:-70px;translate:-50% 0;font-family:{HAND};font-size:58px;color:#d98a00;white-space:nowrap;rotate:-6deg}}"""
-    ti, sr = head(g, tL)
-    body = (f"<div class=dim style='background:rgba(255,255,255,.55);animation:fadeIn2 .3s {tL:.2f}s both'></div><div class=stage>{ti}"
-            f"<div class=vsw>{side(L, tL, '#8fc0ea')}<div class=vsG style='animation:popO .25s {tG:.2f}s both'>&gt;{memo}</div>{side(R, tR, '#aeb4bc')}</div>{sr}</div>")
+    .vsG{{font-size:110px;font-weight:900;color:#fff;-webkit-text-stroke:10px #14202e;paint-order:stroke fill;line-height:1.1;position:relative}}
+    .vsM{{position:absolute;left:50%;top:-78px;translate:-50% 0;font-size:34px;font-weight:800;color:#111;-webkit-text-stroke:0;paint-order:normal;background:#ffd93b;border-radius:30px;padding:6px 22px;white-space:nowrap;box-shadow:0 4px 10px rgba(0,0,0,.3)}}"""
+    ti, sr = head(g, tL, white=True)
+    body = (f"<div class=dim style='background:rgba(0,0,0,.55);animation:fadeIn2 .3s {tL:.2f}s both'></div><div class=stage>{ti}"
+            f"<div class=vsw>{side(L, tL, '#7cc0ff')}<div class=vsG style='animation:popO .25s {tG:.2f}s both'>&gt;{memo}</div>{side(R, tR, '#ff6b6b')}</div>{sr}</div>")
     return css, body, "overlay"
 
 # ---------------------------------------------------------------- 19 아이콘 흐름도
@@ -466,19 +466,20 @@ def history(si, g, at, ctx):
     ti, sr = head(g, t0)
     return css, paper_wrap(f"{ti}<div class=hw><div class=hline></div>{''.join(out)}</div>", sr, ctx, t0), "paper"
 
-# ---------------------------------------------------------------- 23 용어 정의 (글리치 배경)
+# ---------------------------------------------------------------- 23 용어 정의 (어두운 단색 + 노란 밑줄)
 def glitch(si, g, at, ctx):
+    """용어 정의 카드. 예전 이름 glitch 유지(=define). 보라 글리치 배경은 오너가 싫어해 없앰."""
     t0 = at(si, g.get("at", 0))
-    css = f""".gbg{{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#2b2140,#3b2b55 50%,#241a36)}}
-    .gbg:before{{content:'';position:absolute;inset:-240px 0 0 0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px),
-       repeating-linear-gradient(0deg,rgba(180,140,255,.18) 0 18px,transparent 18px 60px);animation:scan 2s linear infinite}}
-    .gbg i{{position:absolute;left:-5%;width:110%;background:rgba(200,180,255,.22);animation:jitter .6s steps(4) infinite}}
-    .gd{{position:absolute;left:40px;bottom:60px;right:40px;color:#fff}}
-    .gd h2{{font-size:72px;font-weight:900;letter-spacing:-1px;animation:blurIn .3s {t0:.2f}s both}}
-    .gd p{{margin-top:12px;font-size:32px;line-height:1.5;font-weight:500;animation:fadeIn2 .4s {t0 + .35:.2f}s both;word-break:keep-all}}"""
-    bands = "".join(f"<i style='top:{y}%;height:{h}px;animation-delay:-{k * .13:.2f}s'></i>" for k, (y, h) in enumerate([(18, 10), (37, 4), (52, 16), (71, 6), (84, 3)]))
-    return css, (f"<div class=gbg>{bands}</div><div class=stage><div class=gd><h2>{esc(g['term'])}</h2>"
-                 f"<p>{rich(esc(g['definition']), '#ff9f3a')}</p></div></div>"), "dark"
+    css = f""".gbg{{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 40%,#2a2f38,#0e1014 70%)}}
+    .gd{{position:absolute;left:60px;right:60px;top:50%;translate:0 -50%;color:#fff}}
+    .gd small{{display:block;font-size:30px;font-weight:700;color:#bfc6d0;margin-bottom:10px;animation:fadeIn2 .3s {t0:.2f}s both}}
+    .gd h2{{display:inline-block;font-size:86px;font-weight:900;letter-spacing:-1px;animation:blurIn .3s {t0:.2f}s both}}
+    .gd .ul{{height:12px;width:100%;background:#f0e040;margin-top:6px;transform-origin:left;animation:growX .4s {t0 + .25:.2f}s both}}
+    .gd p{{margin-top:34px;font-size:40px;line-height:1.5;font-weight:500;animation:fadeIn2 .4s {t0 + .5:.2f}s both;word-break:keep-all}}"""
+    lab = f"<small>{esc(g['label'])}</small>" if g.get("label") else "<small>용어 정리</small>"
+    return css, (f"<div class=gbg></div><div class=stage><div class=gd>{lab}<div style='display:inline-block'><h2>{esc(g['term'])}</h2><div class=ul></div></div>"
+                 f"<p>{rich(esc(g['definition']), '#f0e040')}</p></div></div>"), "dark"
+define = glitch
 
 # ---------------------------------------------------------------- 24 키네틱 큰 글자 (실사 위)
 def kinetic(si, g, at, ctx):
@@ -494,7 +495,7 @@ def stamp(si, g, at, ctx):
 
 JH = {"table": table, "hbar": hbar, "line": line, "vbar": vbar, "darkcard": darkcard, "tanbox": tanbox, "statcards": statcards,
       "number": number, "faded": faded, "bubble": bubble, "circles": circles, "headbar": headbar, "callout": callout, "pin": pin,
-      "portrait": portrait, "vsnum": vsnum, "flow": flow, "history": history, "glitch": glitch, "kinetic": kinetic, "stamp": stamp}
+      "portrait": portrait, "vsnum": vsnum, "flow": flow, "history": history, "glitch": glitch, "define": define, "kinetic": kinetic, "stamp": stamp}
 DIM_CSS = ".dim{position:absolute;inset:0;background:rgba(0,0,0,.55)}"
 
 def is_light(scene):

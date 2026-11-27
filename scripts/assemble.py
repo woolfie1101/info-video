@@ -44,11 +44,8 @@ for si, (sc, d) in enumerate(zip(cfg["scenes"], durs), 1):
     inp = (["-loop", "1", "-t", f"{d}", "-i", str(bg)] if still else ["-stream_loop", "-1", "-t", f"{d}", "-i", str(bg)])
     if opaque_g:
         v = "[0:v]fps=30,setsar=1"
-    elif still:  # 픽사베이 사진: 칸 비율로 자른 뒤 천천히 확대(1.0→1.08)
-        n = int(d * FPS) + 1
-        v = (f"[0:v]{crop_filter(bg, sc.get('focus', .5))},scale={BW * 2}:{BH * 2},"
-             f"zoompan=z='1+0.08*on/{n}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={n}:s={BW}x{BH}:fps={FPS},"
-             f"eq=brightness=-0.04,vignette=PI/5,setsar=1")
+    elif still:  # 픽사베이 사진: 칸 비율로 잘라 고정(줌 없음)
+        v = f"[0:v]{crop_filter(bg, sc.get('focus', .5))},fps={FPS},eq=brightness=-0.04,vignette=PI/5,setsar=1"
     else:
         v = f"[0:v]{crop_filter(bg, sc.get('focus', .5))},fps=30,eq=brightness=-0.06,vignette=PI/5,setsar=1"
     nin = 1

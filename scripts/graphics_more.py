@@ -9,7 +9,7 @@ EXTRA_CSS = """
 @keyframes slideUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
 @keyframes rowIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 @keyframes hl{from{background-size:0% 100%}to{background-size:100% 100%}}
-@keyframes zoomSlow{from{transform:scale(1)}to{transform:scale(1.08)}}
+@keyframes zoomSlow{from{transform:none}to{transform:none}}
 @property --n{syntax:'<integer>';inherits:false;initial-value:0}
 .cnt{counter-reset:n var(--n)}.cnt:before{content:counter(n)}
 .hl{background:linear-gradient(#ffe45c,#ffe45c) no-repeat 0 88%/0% 40%;padding:0 4px}
