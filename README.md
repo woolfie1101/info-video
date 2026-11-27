@@ -10,10 +10,10 @@
 'AI로 인한 대학 시험 부정행위'를 주제로 템플릿 22종을 한 번씩 보여주는 약 2분짜리 영상입니다. 내레이션은 일레븐랩스 클론 목소리입니다.
 **이미지를 누르면 소리 있는 영상(mp4)이 열립니다.**
 
-| 가로형 (유튜브) | 세로 쇼츠형 (쇼츠·릴스) |
-|---|---|
-| <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4"><img src="docs/demo_wide.gif" width="520"></a> | <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4"><img src="docs/demo_shorts.gif" width="260"></a> |
-| [▶ 가로형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4) | [▶ 쇼츠형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4) |
+| ① 가로형 (유튜브) | ② 세로 기본형 (쇼츠·릴스) | ③ 세로 쇼츠형 (쇼츠·릴스) |
+|:---:|:---:|:---:|
+| <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4"><img src="docs/demo_wide.gif" width="420"></a> | <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-vertical.mp4"><img src="docs/demo_vertical.gif" width="200"></a> | <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4"><img src="docs/demo_shorts.gif" width="200"></a> |
+| [▶ 가로형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4) | [▶ 세로 기본형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-vertical.mp4) | [▶ 쇼츠형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4) |
 
 > 영상 파일은 [릴리스 페이지](https://github.com/woolfie1101/info-video/releases/tag/showcase-1)에도 있습니다.
 
