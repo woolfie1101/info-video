@@ -5,19 +5,27 @@
 얼굴 없이 목소리로 이슈나 지식을 설명하는 유튜브·릴스·쇼츠 영상용입니다.
 실사 화면은 [픽사베이](https://pixabay.com) 무료 스톡, 목소리는 [일레븐랩스](https://elevenlabs.io), 그래프와 카드는 HTML 애니메이션으로 직접 그립니다. AI로 만든 이미지는 쓰지 않습니다.
 
-| 쇼츠형 (세로) | 가로형 |
-|---|---|
-| <img src="docs/demo_shorts.gif" width="260"> | <img src="docs/demo_wide.gif" width="520"> |
+## 예시 영상 (소리 있음)
 
-> 예시: 'AI로 인한 대학 시험 부정행위'를 주제로 만든 템플릿 쇼케이스 일부 (GIF라 소리는 없음)
+'AI로 인한 대학 시험 부정행위'를 주제로 템플릿 22종을 한 번씩 보여주는 약 2분짜리 영상입니다. 내레이션은 일레븐랩스 클론 목소리입니다.
+**이미지를 누르면 소리 있는 영상(mp4)이 열립니다.**
+
+| 가로형 (유튜브) | 세로 쇼츠형 (쇼츠·릴스) |
+|---|---|
+| <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4"><img src="docs/demo_wide.gif" width="520"></a> | <a href="https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4"><img src="docs/demo_shorts.gif" width="260"></a> |
+| [▶ 가로형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-wide.mp4) | [▶ 쇼츠형 영상 보기](https://github.com/woolfie1101/info-video/releases/download/showcase-1/showcase-shorts.mp4) |
+
+> 영상 파일은 [릴리스 페이지](https://github.com/woolfie1101/info-video/releases/tag/showcase-1)에도 있습니다.
 
 ---
 
 ## 무엇을 만들어 주나요
 
-같은 대본 하나로 세 가지 형식이 한 번에 나옵니다.
+같은 대본 하나로 세 가지 형식이 한 번에 나옵니다. (아래는 같은 장면을 세 형식으로 만든 것)
 
-![세 가지 형식](docs/formats.jpg)
+| ① 가로형 `h` | ② 세로 기본형 `v` | ③ 세로 쇼츠형 `f` |
+|:---:|:---:|:---:|
+| <img src="docs/format_h.jpg" width="420"> | <img src="docs/format_v.jpg" width="180"> | <img src="docs/format_f.jpg" width="180"> |
 
 | 형식 | 크기 | 쓰는 곳 | 화면 구성 |
 |---|---|---|---|
@@ -36,22 +44,22 @@
 | 어두운 단독 화면 | 2 | 인물 인용 · 용어 정의 |
 | 일반 스타일 | 12 | 막대그래프 · 아이콘 카드 · 인용 카드 · 숫자 비교 · 도넛 · 가로 타임라인 · 순위 막대 · 큰 숫자 · 기사 제목 카드 · 단계 흐름 · 대결 비교 · 사진 액자 |
 
-앞의 22종은 한국 지식 설명 유튜브 영상들을 프레임 단위로 분석해, 자주 쓰는 화면 틀을 그대로 움직이는 템플릿으로 만든 것입니다.
+아래 모든 템플릿 이미지는 실제로 움직이는 모습(GIF)입니다. 앞의 22종은 한국 지식 설명 유튜브 영상들을 프레임 단위로 분석해, 자주 쓰는 화면 틀을 그대로 움직이는 템플릿으로 만든 것입니다.
 모든 템플릿은 내레이션 박자에 맞춰 움직이며 등장하고, 자막·채널명 자리와 겹치지 않는 칸 안에만 그려집니다. 설정 예시는 [references/graphics.md](references/graphics.md)에 있습니다.
 
 ### 흰 종이 슬라이드
 
 구겨진 흰 종이 배경. 내용 전체가 블러+페이드로 들어오고(0.35초) 데이터가 0.5~1초 안에 채워집니다(화면 줌은 없음). 이 위에서는 자막 바·소주제 이름표가 자동으로 회색이 됩니다.
 
-| <img src="docs/t/table.jpg" width="280"> | <img src="docs/t/hbar.jpg" width="280"> | <img src="docs/t/line.jpg" width="280"> |
+| <img src="docs/t/table.gif" width="280"> | <img src="docs/t/hbar.gif" width="280"> | <img src="docs/t/line.gif" width="280"> |
 |---|---|---|
 | **흰 표** `table`<br>남색 머리행, 줄무늬 행, 강조 열은 연파랑 | **가로 막대** `hbar`<br>회색 트랙 위 파란 막대가 왼쪽→오른쪽으로 자람 | **선 그래프** `line`<br>진회색 선이 왼쪽→오른쪽으로 그려지고 회색 그라데이션 면적, 흰 원 데이터점+굵은 숫자 |
 
-| <img src="docs/t/vbar.jpg" width="280"> | <img src="docs/t/statcards.jpg" width="280"> | <img src="docs/t/circles.jpg" width="280"> |
+| <img src="docs/t/vbar.gif" width="280"> | <img src="docs/t/statcards.gif" width="280"> | <img src="docs/t/circles.gif" width="280"> |
 |---|---|---|
 | **세로 막대** `vbar`<br>회색 막대 + 강조 막대만 진파랑, 위에 숫자 카운트업, 아래 명조체 한 줄 설명(`caption`, **굵게**는 빨강) | **수치 카드** `statcards`<br>2~3칸 카드: 파란 머리 → 이전/이후 숫자 → 연파랑 줄에 '변화' 칩과 증감 | **원형 비교** `circles`<br>큰 원 2~3개가 차례로 튀어나오고 가운데 %가 소수점까지 올라감 |
 
-| <img src="docs/t/flow.jpg" width="280"> | <img src="docs/t/history.jpg" width="280"> |
+| <img src="docs/t/flow.gif" width="280"> | <img src="docs/t/history.gif" width="280"> |
 |---|---|
 | **아이콘 흐름도** `flow`<br>파란 테두리 원 아이콘 + 아래 이름 칩 + 파란 화살표 | **세로 연혁** `history`<br>왼쪽 파란 날짜, 세로선과 점, 오른쪽 회색 줄 위 내용 |
 
@@ -59,19 +67,19 @@
 
 장면에 `pixabay_video`(또는 `pixabay_image`)와 `graphic`을 함께 적으면, 그래픽이 투명 배경으로 만들어져 실사 위에 합성됩니다.
 
-| <img src="docs/t/darkcard.jpg" width="280"> | <img src="docs/t/tanbox.jpg" width="280"> | <img src="docs/t/number.jpg" width="280"> |
+| <img src="docs/t/darkcard.gif" width="280"> | <img src="docs/t/tanbox.gif" width="280"> | <img src="docs/t/number.gif" width="280"> |
 |---|---|---|
 | **어두운 내레이션 카드** `darkcard`<br>실사를 어둡게 깔고 가운데 명조체 흰 글씨가 한 글자씩 타자로 | **황갈색 인용 박스** `tanbox`<br>실사 위 베이지 박스(갈색 테두리), 명조체 검정 글씨 타자, **굵게**는 진빨강 | **큰 숫자** `number`<br>흰 이름표 + 하늘색 큰 숫자가 0부터 올라감(소수점·쉼표 지원) + 아래 설명 |
 
-| <img src="docs/t/faded.jpg" width="280"> | <img src="docs/t/bubble.jpg" width="280"> | <img src="docs/t/headbar.jpg" width="280"> |
+| <img src="docs/t/faded.gif" width="280"> | <img src="docs/t/bubble.gif" width="280"> | <img src="docs/t/headbar.gif" width="280"> |
 |---|---|---|
 | **흐린 사진 + 글** `faded`<br>실사를 흰색으로 70% 덮고 명조체 검정 글씨 타자, **굵게**는 빨강 | **말풍선** `bubble`<br>흰 둥근 말풍선(손글씨풍 굵은 글씨)이 꼬리 쪽에서 늘어나며 톡 튀어나옴 | **헤드라인 띠** `headbar`<br>실사 위 흰 가로 띠에 기사 제목, 핵심어만 빨강 |
 
-| <img src="docs/t/callout.jpg" width="280"> | <img src="docs/t/pin.jpg" width="280"> | <img src="docs/t/vsnum.jpg" width="280"> |
+| <img src="docs/t/callout.gif" width="280"> | <img src="docs/t/pin.gif" width="280"> | <img src="docs/t/vsnum.gif" width="280"> |
 |---|---|---|
 | **라벨 콜아웃** `callout`<br>검은 점 → 가는 선이 뻗음 → 파란 빛 테두리 라벨(굵은 제목+작은 부제) | **위치 핀** `pin`<br>항공 실사 위 빨간 핀 + 흰 굵은 지명 | **숫자 대결** `vsnum`<br>어둡게 깐 실사 위 큰 숫자 두 개(파랑·빨강), 가운데 '>' + 노란 알약 메모 |
 
-| <img src="docs/t/kinetic.jpg" width="280"> | <img src="docs/t/stamp.jpg" width="280"> | <img src="docs/t/overchart.jpg" width="280"> |
+| <img src="docs/t/kinetic.gif" width="280"> | <img src="docs/t/stamp.gif" width="280"> | <img src="docs/t/overchart.gif" width="280"> |
 |---|---|---|
 | **키네틱 큰 글자** `kinetic`<br>화면 가득 크게 튀어나왔다가 줄어들며 자리 잡는 굵은 한 단어 | **강조 도장** `stamp`<br>빨간 테두리 도장이 찍히듯 커졌다 줄어듦 | **실사 위 막대 차트** `vbar`<br>`vbar`에 스톡을 같이 적으면: 어두운 실사 위 파랑·회색 막대 + 흰 숫자 |
 
@@ -79,7 +87,7 @@
 
 실사 없이 자체 배경을 씁니다.
 
-| <img src="docs/t/portrait.jpg" width="280"> | <img src="docs/t/define.jpg" width="280"> |
+| <img src="docs/t/portrait.gif" width="280"> | <img src="docs/t/define.gif" width="280"> |
 |---|---|
 | **인물 인용** `portrait`<br>어두운 배경, 왼쪽 인물 사진(`pixabay_image`), 큰 따옴표와 인용문(**굵게**는 노랑), 손글씨 이름표 | **용어 정의** `define`<br>어두운 단색 배경, 큰 용어에 노란 밑줄이 그어지고 설명이 나옴 |
 
@@ -87,19 +95,19 @@
 
 흰 종이 배경에 굵은 검정 테두리·평면 색을 쓰는 스타일입니다. 위 템플릿과 섞어 써도 됩니다.
 
-| <img src="docs/t/g_bar.jpg" width="280"> | <img src="docs/t/g_cards.jpg" width="280"> | <img src="docs/t/g_quote.jpg" width="280"> |
+| <img src="docs/t/g_bar.gif" width="280"> | <img src="docs/t/g_cards.gif" width="280"> | <img src="docs/t/g_quote.gif" width="280"> |
 |---|---|---|
 | **막대그래프** `bar`<br>남색 막대가 아래에서 자라고 말풍선 수치 태그, 강조 막대는 빨강 | **아이콘 카드** `cards`<br>평면 아이콘 카드 2~3장이 하나씩 튀어나옴(아이콘 7종) | **인용 카드** `quote`<br>검정 배경+빛줄기, 명조체 글자가 타자로, 핵심어 노랑 |
 
-| <img src="docs/t/g_compare.jpg" width="280"> | <img src="docs/t/g_donut.jpg" width="280"> | <img src="docs/t/g_timeline.jpg" width="280"> |
+| <img src="docs/t/g_compare.gif" width="280"> | <img src="docs/t/g_donut.gif" width="280"> | <img src="docs/t/g_timeline.gif" width="280"> |
 |---|---|---|
 | **숫자 비교** `compare`<br>이전(파랑)·이후(빨강) 카드 두 장, 숫자가 0부터 올라감 | **도넛** `donut`<br>원이 비율만큼 차오르고 가운데 %가 올라감, 오른쪽 메모 | **가로 타임라인** `timeline`<br>가로선이 그려지고 시점 점과 설명 카드가 차례로 |
 
-| <img src="docs/t/g_ranking.jpg" width="280"> | <img src="docs/t/g_bignum.jpg" width="280"> | <img src="docs/t/g_headline.jpg" width="280"> |
+| <img src="docs/t/g_ranking.gif" width="280"> | <img src="docs/t/g_bignum.gif" width="280"> | <img src="docs/t/g_headline.gif" width="280"> |
 |---|---|---|
 | **순위 막대** `ranking`<br>1~5위 가로 막대가 아래 순위부터 차례로 자람 | **큰 숫자** `bignum`<br>종이 위 아주 큰 숫자 카운트업 + 밑줄 + 설명 | **기사 제목 카드** `headline`<br>기사 카드가 겹겹이 올라오고 핵심어에 형광펜 |
 
-| <img src="docs/t/g_steps.jpg" width="280"> | <img src="docs/t/g_versus.jpg" width="280"> | <img src="docs/t/g_photo.jpg" width="280"> |
+| <img src="docs/t/g_steps.gif" width="280"> | <img src="docs/t/g_versus.gif" width="280"> | <img src="docs/t/g_photo.gif" width="280"> |
 |---|---|---|
 | **단계 흐름** `steps`<br>1→2→3 번호 원과 화살표가 차례로 | **대결 비교** `versus`<br>두 편 카드를 나란히, 가운데 VS | **사진 액자** `photo`<br>픽사베이 사진을 액자처럼 + 설명, 핵심어에 형광펜 |
 
