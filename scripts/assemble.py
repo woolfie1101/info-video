@@ -34,12 +34,15 @@ def crop_filter(f, fy):
 
 parts = []
 for si, (sc, d) in enumerate(zip(cfg["scenes"], durs), 1):
-    graphic = "graphic" in sc
+    gmov = CLIPS / f"g{si}_{O}.mov"   # 투명 그래픽(실사 위 합성용)
+    gmp4 = CLIPS / f"g{si}_{O}.mp4"   # 불투명 그래픽(종이 슬라이드 등)
+    overlay_g = "graphic" in sc and gmov.exists()
+    opaque_g = "graphic" in sc and not overlay_g
     # 스톡: "stock"(기본 원본, 영상 mp4 또는 사진 jpg), 세로용 원본을 따로 받았으면 "stock_v"
-    bg = CLIPS / f"g{si}_{O}.mp4" if graphic else ROOT / (sc.get("stock_v") if O != "h" and sc.get("stock_v") else sc["stock"])
+    bg = gmp4 if opaque_g else ROOT / (sc.get("stock_v") if O != "h" and sc.get("stock_v") else sc["stock"])
     still = bg.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")
     inp = (["-loop", "1", "-t", f"{d}", "-i", str(bg)] if still else ["-stream_loop", "-1", "-t", f"{d}", "-i", str(bg)])
-    if graphic:
+    if opaque_g:
         v = "[0:v]fps=30,setsar=1"
     elif still:  # 픽사베이 사진: 칸 비율로 자른 뒤 천천히 확대(1.0→1.08)
         n = int(d * FPS) + 1
@@ -48,13 +51,17 @@ for si, (sc, d) in enumerate(zip(cfg["scenes"], durs), 1):
              f"eq=brightness=-0.04,vignette=PI/5,setsar=1")
     else:
         v = f"[0:v]{crop_filter(bg, sc.get('focus', .5))},fps=30,eq=brightness=-0.06,vignette=PI/5,setsar=1"
+    nin = 1
+    if overlay_g:  # 실사 위에 투명 그래픽을 얹는다
+        inp += ["-t", f"{d}", "-i", str(gmov)]; nin = 2
+        v += f"[s0];[1:v]fps=30,format=rgba[g0];[s0][g0]overlay=0:0:format=auto,format=yuv420p"
     v += f",pad={W}:{H}:0:{TOPY}:black[bg]" if F else "[bg]"
     chain, last = [v], "bg"
     ovs = [t for t in tl if t["scene"] == si]
     for k, o in enumerate(ovs, 1):
         inp += ["-i", str(ROOT / f"frames_{O}/o{si}_{o['idx']}.png")]
         t1 = o["start"] + o["dur"] if k < len(ovs) else d + 1
-        chain.append(f"[{last}][{k}:v]overlay=0:0:enable='between(t,{o['start']:.3f},{t1:.3f})'[v{k}]")
+        chain.append(f"[{last}][{k + nin - 1}:v]overlay=0:0:enable='between(t,{o['start']:.3f},{t1:.3f})'[v{k}]")
         last = f"v{k}"
     out = CLIPS / f"c{si}_{O}.mp4"
     run(["ffmpeg", "-y", "-v", "error", *inp, "-filter_complex", ";".join(chain), "-map", f"[{last}]",

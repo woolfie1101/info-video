@@ -62,6 +62,12 @@ def main():
                         download(best(pixabay_videos(vid=sc[key])[0])["url"], out)
                     print("받음", rel)
                 sc["stock_v" if key.endswith("_v") else "stock"] = rel
+            g = sc.get("graphic") or {}
+            if g.get("pixabay_image"):  # photo 그래픽용 사진
+                rel = f"stock/g{i}.jpg"; out = root / rel
+                if not out.exists():
+                    h = pixabay_images(iid=g["pixabay_image"])[0]; download(h.get("largeImageURL") or h["webformatURL"], out); print("받음", rel)
+                g["src"] = rel
         (root / "config.json").write_text(json.dumps(cfg, ensure_ascii=False, indent=2), encoding="utf-8")
     elif cmd == "sheet":
         load_env(); ids = sys.argv[2].split(","); tmp = Path(tempfile.mkdtemp()); ins = []

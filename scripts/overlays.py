@@ -8,6 +8,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import FONT_CSS, SANS, launch, wait_fonts
+from templates_jh import is_light
 
 ROOT = Path(sys.argv[1]).resolve()
 O = sys.argv[2] if len(sys.argv) > 2 else "h"
@@ -24,6 +25,10 @@ html,body{{width:{W}px;height:{H}px;overflow:hidden;background:transparent;font-
 .sec{{position:absolute;padding:0 26px 0 22px;font-weight:700;color:#fff;background:rgba(40,40,40,.85);border-left:6px solid {TH['label']}}}
 .sub{{position:absolute;left:50%;transform:translateX(-50%);background:rgba(20,20,20,.72);border-radius:10px;color:#fff;font-weight:800;text-align:center}}
 .sub:before{{content:'';position:absolute;left:0;top:10px;bottom:10px;width:7px;background:{TH['accent']};border-radius:3px}}
+/* 밝은 종이 슬라이드 위: 자막 바·이름표를 회색으로, 채널명은 은은한 양각 */
+.light .sub{{background:rgba(110,110,110,.93)}}
+.light .sec{{background:rgba(110,110,110,.93)}}
+.light .logo{{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5),0 0 1px rgba(0,0,0,.6)}}
 .title{{position:absolute;left:0;right:0;top:170px;text-align:center;font-weight:900;font-size:96px;line-height:1.18;letter-spacing:-3px;color:#fff}}
 .title b{{color:{TH['title_accent']}}}
 .acc{{position:absolute;left:0;right:0;top:1700px;text-align:center;font-size:54px;font-weight:700;color:#8c8c8c;letter-spacing:1px}}
@@ -52,7 +57,8 @@ with sync_playwright() as p:
     b = launch(p); pg = b.new_page(viewport={"width": W, "height": H})
     for si, sc in enumerate(CFG["scenes"], 1):
         for ci, c in enumerate(sc["subs"]):
-            pg.set_content(f"<!doctype html><meta charset=utf-8><style>{COMMON}{LAYOUT[O]}</style><body>{body(si, c)}</body>")
+            cls = "light" if is_light(sc) else ""
+            pg.set_content(f"<!doctype html><meta charset=utf-8><style>{COMMON}{LAYOUT[O]}</style><body class='{cls}'>{body(si, c)}</body>")
             wait_fonts(pg)
             pg.screenshot(path=str(OUT / f"o{si}_{ci}.png"), omit_background=True)
     b.close()

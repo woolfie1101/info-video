@@ -61,8 +61,12 @@ def paper():
     return f
 
 # 글꼴: 구글 폰트(어느 컴퓨터든 같은 모양). 본문 Noto Sans KR, 인용 Nanum Myeongjo
-FONT_CSS = ("@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800;900"
-            "&family=Nanum+Myeongjo:wght@700;800&display=block');")
+FONT_CSS = ("@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900"
+            "&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Gaegu:wght@700"
+            "&family=Black+Han+Sans&display=block');")
+HAND = "'Nanum Pen Script','Gaegu',cursive"      # 손글씨(이름표·메모)
+BUBBLE = "'Gaegu','Noto Sans KR',sans-serif"      # 말풍선
+POSTER = "'Black Han Sans','Noto Sans KR',sans-serif"  # 키네틱 큰 글자
 SANS = "'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif"
 SERIF = "'Nanum Myeongjo','AppleMyungjo',serif"
 
@@ -75,4 +79,5 @@ def launch(p):
 
 def wait_fonts(page):
     page.evaluate("document.fonts.ready.then(()=>true)")
-    page.wait_for_timeout(200)
+    page.evaluate("Promise.all([...document.fonts].map(f=>f.load().catch(()=>0)))")
+    page.wait_for_timeout(300)

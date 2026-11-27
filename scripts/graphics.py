@@ -3,12 +3,14 @@
 사용: uv run --with playwright graphics.py <프로젝트 폴더> h|v|f
 - 그래픽은 1000x800 '무대' 좌표로 그리고, 방향별 안전 영역(채널명·자막과 겹치지 않는 칸)에 맞춰 배치한다.
 - 애니메이션은 CSS로 쓰고 프레임마다 시간을 고정해 찍는다. 등장 시점은 자막 번호(at)로 내레이션에 맞춘다.
-장면 graphic 종류(references/graphics.md): bar, cards, quote, compare
+장면 graphic 종류(references/graphics.md): bar, cards, quote, compare, line, donut, table, timeline, ranking, bignum, headline, steps, versus, photo
 """
 import json, os, subprocess, sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from graphics_more import MORE, EXTRA_CSS
+from templates_jh import JH, JH_CSS, COUNT_JS, DIM_CSS
 from common import FONT_CSS, SANS, SERIF, launch, wait_fonts, paper, load_env
 
 ROOT = Path(sys.argv[1]).resolve()
@@ -29,11 +31,14 @@ def at(si, idx):
     ss = [t["start"] for t in tl if t["scene"] == si]
     return ss[min(idx, len(ss) - 1)] if ss else 0
 
-def stage_css():
+K = min(SAFE[2] / 1000, SAFE[3] / 800)
+FLUID_W = min(SAFE[2] / K, 1400)  # 템플릿(JH)용 무대 폭: 가로 화면에선 더 넓게
+
+def stage_css(sw=1000):
     x, y, w, h = SAFE
-    k = min(w / 1000, h / 800); sw, sh = 1000 * k, 800 * k
-    return (f".stage{{position:absolute;left:{x + (w - sw) / 2:.1f}px;top:{y + (h - sh) / 2:.1f}px;width:1000px;height:800px;"
-            f"transform:scale({k:.4f});transform-origin:0 0}}")
+    pw, ph = sw * K, 800 * K
+    return (f".stage{{position:absolute;left:{x + (w - pw) / 2:.1f}px;top:{y + (h - ph) / 2:.1f}px;width:{sw:.0f}px;height:800px;"
+            f"transform:scale({K:.4f});transform-origin:0 0}}")
 
 BASE = FONT_CSS + """*{margin:0;padding:0;box-sizing:border-box}
 html,body{width:%dpx;height:%dpx;overflow:hidden;font-family:%s}
@@ -150,20 +155,33 @@ def compare(si, g):
         <div class=n style="color:#c62828;animation:cR .9s {at(si, a[2]):.2f}s both ease-out"><small>{R.get('suffix', '')}</small></div></div>{s}</div>"""
     return css, body
 
-GRAPHICS = {"bar": bar, "cards": cards, "quote": quote, "compare": compare}
+GRAPHICS = {"bar": bar, "cards": cards, "quote": quote, "compare": compare,
+            **{k: (lambda f: lambda si, g: f(si, g, at))(f) for k, f in MORE.items()}}
+# 한국 지식 설명 유튜브 스타일 템플릿(templates_jh.py): 겹치는 이름(table, line)은 이쪽이 기본
+JH_NAMES = set(JH)
 
-def render(page, name, css, body, dur):
+def render(page, name, css, body, dur, mode="paper", sw=1000):
+    """mode overlay → 투명 배경 .mov(알파, 실사 위 합성), 그 외 → .mp4"""
     f = HTML / f"{name}_{O}.html"
-    f.write_text(f"<!doctype html><meta charset=utf-8><style>{BASE}{stage_css()}{css}</style><body>{body}</body>", encoding="utf-8")
+    f.write_text(f"<!doctype html><meta charset=utf-8><style>{BASE}{EXTRA_CSS}{JH_CSS}{DIM_CSS}{stage_css(sw)}{css}</style>"
+                 f"<body>{body}{COUNT_JS}</body>", encoding="utf-8")
     page.goto(f"file://{f}"); wait_fonts(page)
     page.evaluate("document.getAnimations().forEach(a=>a.pause())")
-    out = CLIPS / f"{name}_{O}.mp4"
-    ff = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "image2pipe", "-framerate", str(FPS), "-i", "-",
-                           "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", str(out)], stdin=subprocess.PIPE)
+    alpha = mode == "overlay"
+    out = CLIPS / f"{name}_{O}.{'mov' if alpha else 'mp4'}"
+    other = CLIPS / f"{name}_{O}.{'mp4' if alpha else 'mov'}"
+    if other.exists(): other.unlink()
+    enc = (["-c:v", "qtrle", "-pix_fmt", "argb"] if alpha else ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18"])
+    ff = subprocess.Popen(["ffmpeg", "-y", "-v", "error", "-f", "image2pipe", "-framerate", str(FPS), "-i", "-", *enc, str(out)],
+                          stdin=subprocess.PIPE)
     for i in range(int(dur * FPS) + 1):
-        page.evaluate(f"document.getAnimations().forEach(a=>a.currentTime={i * 1000 / FPS})")
-        ff.stdin.write(page.screenshot(type="png"))
+        t = i / FPS
+        page.evaluate(f"(()=>{{document.getAnimations().forEach(a=>a.currentTime={t * 1000});window.__tick&&window.__tick({t})}})()")
+        ff.stdin.write(page.screenshot(type="png", omit_background=alpha))
     ff.stdin.close(); ff.wait(); print("✓", out.name, flush=True)
+
+def has_stock(sc):
+    return bool(sc.get("stock") or sc.get("pixabay_video") or sc.get("pixabay_image"))
 
 if __name__ == "__main__":
     only = os.environ.get("ONLY", "")  # 예: ONLY=2,5 (장면 번호)
@@ -173,6 +191,14 @@ if __name__ == "__main__":
         for si, sc in enumerate(cfg["scenes"], 1):
             g = sc.get("graphic")
             if not g or (only and str(si) not in only.split(",")): continue
-            css, body = GRAPHICS[g["type"]](si, g)
-            render(pg, f"g{si}", css, body, durs[si - 1])
+            if g.get("src"): g = {**g, "src": str((ROOT / g["src"]).resolve())}
+            if g["type"] in JH_NAMES:
+                ctx = {"sw": FLUID_W, "dur": durs[si - 1], "over": has_stock(sc)}
+                css, body, mode = JH[g["type"]](si, g, at, ctx)
+                if mode == "overlay" and not has_stock(sc):
+                    print(f"  ! 장면 {si}: '{g['type']}'는 실사 위에 얹는 템플릿 — pixabay_video/pixabay_image 를 같이 적으세요", flush=True)
+                render(pg, f"g{si}", css, body, durs[si - 1], mode, FLUID_W)
+            else:
+                css, body = GRAPHICS[g["type"]](si, g)
+                render(pg, f"g{si}", css, body, durs[si - 1])
         b.close()

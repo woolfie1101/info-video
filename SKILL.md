@@ -23,6 +23,11 @@ description: 지식 설명 유튜브 스타일(얼굴 없는 내레이션 + 실�
 2. **대본 확인받기**: 6~8장면, 장면마다 내레이션 1~2문장 + 화면 계획(스톡/그래픽 종류)을 사용자에게 짧게 보여주고 승인받기
 3. **프로젝트 만들기**: `python3 scripts/init.py <폴더>` → `config.json` 수정
    - 장면: `line`(내레이션), `subs`(화면 자막 조각, 20자 안팎), `section`(소주제), 그리고 `pixabay_video`/`pixabay_image`(스톡 id) 또는 `graphic`
+   - `graphic` 템플릿(자세한 설정은 references/graphics.md):
+     - 흰 종이 슬라이드: table(표), hbar(가로 막대), line(선 그래프), vbar(세로 막대), statcards(수치 카드), circles(원형 비교), flow(아이콘 흐름도), history(세로 연혁)
+     - 실사 위에 얹기(같은 장면에 pixabay_video/pixabay_image 필수): darkcard(어두운 내레이션), tanbox(황갈색 인용), number(큰 숫자), faded(흐린 사진+글), bubble(말풍선), headbar(헤드라인 띠), callout(라벨), pin(위치 핀), vsnum(숫자 대결), kinetic(큰 글자), stamp(도장), vbar+스톡(실사 위 차트)
+     - 어두운 단독: portrait(인물 인용), glitch(용어 정의)
+     - 한 영상에서 같은 템플릿만 반복하지 말고, 표·차트(종이) ↔ 실사 위 카드 ↔ 실사 장면을 번갈아 쓴다
    - 채널: `channel`, 쇼츠형 `title`(2줄: 흰색/강조색, 사실과 어긋나지 않게), `account`, 색 `theme`
 4. **스톡 고르기**: `scripts/fetch_stock.py list "영어 검색어" landscape <폴더>` (사진은 `ilist`)
    → `scripts/fetch_stock.py sheet <id,id,..> 미리보기.jpg` 로 썸네일을 직접 보고 고른다 → 장면에 id 적기
